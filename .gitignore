@@ -1,1 +1,16 @@
+# Mac files
+.DS_Store
+**/.DS_Store
+
+#VSCode metadata
+.vscode
+
+#dist folder
+dist
+
+#dependency directory
 node_modules
+.cache
+
+
+
