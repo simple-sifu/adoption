@@ -12,5 +12,8 @@ dist
 node_modules
 .cache
 
+#environment secrets
+.env
+
 
 
