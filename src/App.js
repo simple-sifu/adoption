@@ -11,17 +11,31 @@ const petfinder = pf({
 });
 
 class App extends React.Component {
-  // constructor(props){
-  //   super(props)
-  //   this.state = {
-  //     pets: []
-  //   };
-
-  // }
+  constructor(props) {
+    super(props);
+    this.state = {
+      pets: []
+    };
+  }
 
   componentDidMount() {
-    const promise = petfinder.breed.list({ animal: "dog" });
-    promise.then(console.log, console.error);
+    petfinder.pet
+      .find({ output: "full", location: "Seattle, WA" })
+      .then(data => {
+        let pets;
+        if (data.petfinder.pets && data.petfinder.pets.pet) {
+          if (Array.isArray(data.petfinder.pets.pet)) {
+            pets = data.petfinder.pets.pet;
+          } else {
+            pets = [data.petfinder.pets.pet];
+          }
+        } else {
+          pets = [];
+        }
+        this.setState({
+          pets
+        });
+      });
   }
 
   handleTitleClick() {
@@ -32,9 +46,17 @@ class App extends React.Component {
     return (
       <div>
         <h1>Adopt Me!</h1>
-        <Pet name="Luna" animal="dog" breed="Havanese" />
-        <Pet name="Pepper" animal="bird" breed="Cockatiel" />
-        <Pet name="Doink" animal="cat" breed="Mixed" />
+        <div>
+          {this.state.pets.map(pet => {
+            let breed;
+            if (Array.isArray(pet.breeds.breed)) {
+              breed = pet.breeds.breed.join(", ");
+            } else {
+              breed = pet.breeds.breed;
+            }
+            return <Pet animal={pet.animal} name={pet.name} breed={breed} />;
+          })}
+        </div>
       </div>
     );
   }
